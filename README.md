@@ -3,7 +3,7 @@ deep-mail
 
 deepjs wrapper for nodemailer.
 
-For transporter config paraleters see nodemailer docs.
+For transporter config parameters see nodemailer docs.
 
 ```javascript
 	require("deep-mail")
