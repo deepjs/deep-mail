@@ -1,8 +1,6 @@
 var nodemailer = require("nodemailer"),
 	deep = require("deepjs");
-
-
-
+	
 var closure = {};
 
 deep.mail = function(params, datas, transporter, closeAfter){
@@ -88,6 +86,5 @@ deep.Chain.add("mail", function(params, transporter, closeAfter) {
 	addInChain.call(this, func);
 	return self;
 });
-
 
 module.exports = deep.mail;
