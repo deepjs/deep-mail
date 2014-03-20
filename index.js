@@ -89,14 +89,16 @@ deep.mail.postmark = function(APIKEY){
 	var transporter = {
 		handler:postmark(APIKEY),
 		prepare:function(params, datas){
-			defaultPreparation(params, datas);
-			return {
-				From: params.from, 
-		        To: params.to, 
-		        Subject: params.subject, 
-		        TextBody: params.text,
-		        Attachements:params.attachments
-			};
+			return deep.when(defaultPreparation(params, datas))
+			.done(function(params){
+				return {
+					From: params.from, 
+			        To: params.to, 
+			        Subject: params.subject, 
+			        TextBody: params.text,
+			        Attachements:params.attachments
+				};
+			});
 		},
 		send:function(params, datas)
 		{
