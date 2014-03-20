@@ -1,20 +1,20 @@
 deep-mail
 ===
 
-deepjs wrapper for nodemailer.
+deepjs wrapper for nodemailer and postmark.
 
 For transporter config parameters see nodemailer docs.
 
 ```javascript
 	require("deep-mail")
 	// configure default transporter
-	.defaultTransporter("SMTP",{	
+	.defaultTransporter(deep.mail.nodemailer("SMTP",{	
 	    service: "Gmail",
 	    auth: {
 	        user: "gmail.user@gmail.com",
 	        pass: "userpass"
 	    }
-	});
+	}));
 
 	//....
 
@@ -44,13 +44,7 @@ You could use deep.context to manage contextualised transporter.
 ```javascript
 
 	deep.when(...)
-	.context("deep-mail-transporter", deep.mail.transporter("SMTP":{
-		service: "Gmail",
-		    auth: {
-		        user: "gmail.user@gmail.com",
-		        pass: "userpass"
-		    }
-	}))
+	.context("deep-mail-transporter", deep.mail.postmark("YOURAPIKEY"))
 	.done(function(){
 		//...
 		deep.mail({ ... }).log();

@@ -1,12 +1,21 @@
 var nodemailer = require("nodemailer"),
 	deep = require("deepjs");
-	
+
 var closure = {};
 
 deep.mail = function(params, datas, transporter, closeAfter){
 	transporter = transporter || deep.context["deep-mail-transporter"] || closure.transporter;
 	if(!transporter)
 		return deep.errors.Email("You need to define an email transporter before sending email.");
+	return transporter.send(params, datas, closeAfter);
+};
+
+deep.mail.defaultTransporter = function(transporter){
+	closure.transporter = transporter;
+	return transporter;
+};
+
+function defaultPreparation (params, datas){
 	params = deep.utils.copy(params);
 	var promises = [];
 	if(params.text && typeof params.text === "string")
@@ -37,7 +46,7 @@ deep.mail = function(params, datas, transporter, closeAfter){
 				params.html = tmp(datas);
 			else if(params.html)
 				params.html = tmp;
-			return deep.mail.send(params, transporter, closeAfter);
+			return params;
 		});
 	if(!params.text)
 		if(datas)
@@ -48,31 +57,64 @@ deep.mail = function(params, datas, transporter, closeAfter){
 		params.text = params.text(datas);
 	if(typeof params.html === 'function')
 		params.html = params.html(datas);
-
-	return deep.mail.send(params, transporter, closeAfter);
+	return params;
 };
 
-deep.mail.send = function(options, transporter, closeAfter)
-{
-	var def = deep.Deferred();
-	transporter.sendMail(options, function(error, response){
-	    if(error)
-	        def.reject(error);
-	    else
-	        def.resolve(response.message);
-	    if(closeAfter)
-	    	transporter.close();
-	});
-	return def.promise();
-}
-
-deep.mail.defaultTransporter = function(type, config){
-	closure.transporter = nodemailer.createTransport(type, config);
-	return closure.transporter;
+deep.mail.nodemailer = function(type, config){
+	var transporter = {
+		handler:nodemailer.createTransport(type, config),
+		prepare:defaultPreparation,
+		send:function(params, datas, closeAfter)
+		{
+			var self = this;
+			return deep.when(this.prepare(params, datas))
+			.done(function(params){
+				var def = deep.Deferred();
+				self.handler.sendMail(params, function(error, response){
+				    if(error)
+				        def.reject(error);
+				    else
+				        def.resolve(response.message);
+				    if(closeAfter)
+				    	transporter.close();
+				});
+				return def.promise();
+			});
+		}
+	};
+	return transporter;
 };
 
-deep.mail.transporter = function(type, config){
-	return nodemailer.createTransport(type, config);
+deep.mail.postmark = function(APIKEY){
+	var transporter = {
+		handler:postmark(APIKEY),
+		prepare:function(params, datas){
+			defaultPreparation(params, datas);
+			return {
+				From: params.from, 
+		        To: params.to, 
+		        Subject: params.subject, 
+		        TextBody: params.text,
+		        Attachements:params.attachments
+			};
+		},
+		send:function(params, datas)
+		{
+			var self = this;
+			return deep.when(this.prepare(params, datas))
+			.done(function(params){
+				var def = deep.Deferred();
+				self.handler.send(params, function(error, success){
+				    if(error)
+				        def.reject(error);
+				    else
+				        def.resolve(success);
+				});
+				return def.promise();
+			});
+		}
+	};
+	return transporter;
 };
 
 deep.Chain.add("mail", function(params, transporter, closeAfter) {
