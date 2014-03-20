@@ -30,7 +30,7 @@ For transporter config parameters see nodemailer docs.
 	//...
 
 	deep(myText)
-	.email({	// use default transporter to send chain's value(s) (as JSON) through email
+	.mail({	// use default transporter to send chain's value(s) (as JSON) through email
 	    from: "Fred Foo ✔ <foo@blurdybloop.com>", // sender address
 	    to: "bar@blurdybloop.com, baz@blurdybloop.com", // list of receivers
 	    subject: "Hello ✔", // Subject line
@@ -52,6 +52,7 @@ You could use deep.context to manage contextualised transporter.
 		    }
 	}))
 	.done(function(){
+		//...
 		deep.mail({ ... }).log();
 	});
 ```
@@ -71,6 +72,6 @@ deep.mail(params, datas, transporter, closeAfter)...;
 
 // and
 
-deep(...).email(params, transporter, closeAfter)...;
+deep(...).mail(params, transporter, closeAfter)...;
 
 ```
