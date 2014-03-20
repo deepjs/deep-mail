@@ -62,8 +62,6 @@ deep.mail.send = function(options, transporter, closeAfter)
 	        def.resolve(response.message);
 	    if(closeAfter)
 	    	transporter.close();
-	    // if you don't want to use this transport object anymore, uncomment following line
-	    //smtpTransport.close(); // shut down the connection pool, no more messages
 	});
 	return def.promise();
 }
