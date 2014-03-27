@@ -2,7 +2,7 @@
   "name": "deep-mail",
   "description":"deepjs wrap for nodemailer",
   "author":"Gilles Coomans <gilles.coomans@gmail.com>", 
-  "version": "0.0.3",
+  "version": "0.0.4",
   "contributors": ["Philippe Delabye <phil@chemicalrules.net>"],
   "licenses": [
     {
@@ -16,7 +16,8 @@
   },
   "dependencies": {
     "deepjs":">=0.10.15",
-    "nodemailer":"0.6.1"
+    "nodemailer":"0.6.1",
+    "postmark":"0.2.0"
   },
   "mappings":{
   },
