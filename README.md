@@ -44,7 +44,7 @@ You could use deep.context to manage contextualised transporter.
 ```javascript
 
 	deep.when(...)
-	.context("deep-mail-transporter", deep.mail.postmark("YOURAPIKEY"))
+	.toContext("deep-mail-transporter", deep.mail.postmark("YOURAPIKEY"))
 	.done(function(){
 		//...
 		deep.mail({ ... }).log();
