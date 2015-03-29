@@ -39,14 +39,14 @@ deep.mail = function(params, datas, transporter, closeAfter){
 				params = params();
 			if(datas && datas._deep_ocm_)
 				datas = datas();
-			transporter = transporter || deep.context["deep-mail-transporter"] || closure.transporter;
+			transporter = transporter || deep.context("mail-transporter") || closure.transporter;
 			if(!transporter)
 				return deep.errors.Mail("You need to define an email transporter before sending email.");
 			if(transporter._deep_ocm_)
 				transporter = transporter();
 			return transporter.send(params, datas, closeAfter);
 		});
-	transporter = transporter || deep.context["deep-mail-transporter"] || closure.transporter;
+	transporter = transporter || deep.context("mail-transporter") || closure.transporter;
 	if(!transporter)
 		return deep.errors.Mail("You need to define an email transporter before sending email.");
 	return transporter.send(params, datas, closeAfter);
