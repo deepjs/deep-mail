@@ -52,13 +52,14 @@ deep.mail = function(params, datas, transporter, closeAfter){
 	return transporter.send(params, datas, closeAfter);
 };
 
-deep.Chain.add("mail", function(params, transporter, closeAfter) {
-	var self = this;
-	var func = function() {
-		return deep.mail(params, deep.chain.val(self), transporter, closeAfter);
-	};
-	func._isDone_ = true;
-	return addInChain.call(self, func);
+deep.Promise._up({
+	mail : function(params, transporter, closeAfter) {
+		var func = function(s) {
+			return deep.mail(params, deep.utils.nodes.val(s), transporter, closeAfter);
+		};
+		func._isDone_ = true;
+		return this._enqueue(func);
+	}
 });
 
 deep.mail.defaultTransporter = function(transporter){
