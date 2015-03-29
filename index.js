@@ -48,7 +48,7 @@ deep.mail = function(params, datas, transporter, closeAfter){
 		});
 	transporter = transporter || deep.context("mail-transporter") || closure.transporter;
 	if(!transporter)
-		return deep.errors.Mail("You need to define an email transporter before sending email.");
+		return deep.when(deep.errors.Mail("You need to define an email transporter before sending email."));
 	return transporter.send(params, datas, closeAfter);
 };
 
