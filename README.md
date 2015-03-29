@@ -44,14 +44,14 @@ You could use deep.context to manage contextualised transporter.
 ```javascript
 
 	deep.when(...)
-	.toContext("deep-mail-transporter", deep.mail.postmark("YOURAPIKEY"))
+	.toContext("mail-transporter", deep.mail.postmark("YOURAPIKEY"))
 	.done(function(){
 		//...
 		deep.mail({ ... }).log();
 	});
 ```
 
-deep.mail will first look after a 'deep-mail-transporter' property in deep.context before trying to use the default (general) one.
+deep.mail will first look after a 'mail-transporter' property in deep.context before trying to use the default (general) one.
 
 
 see deepjs docs on concurrent context management to fully grasp the utility of such manipulation
